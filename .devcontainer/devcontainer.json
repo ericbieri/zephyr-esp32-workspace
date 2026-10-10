@@ -1,0 +1,32 @@
+{
+  "name": "Zephyr development environment for ESP32 Xtensa MCUs",
+  "image": "erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.33",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools-extension-pack",
+        "nordic-semiconductor.nrf-devicetree",
+        "ms-vscode.hexeditor",
+        "github.copilot"
+      ]
+    }
+  },
+  "forwardPorts": [],
+  "workspaceMount": "source=${localWorkspaceFolder}/workspace,target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace",
+  // "postStartCommand": "code --file-uri /zephyr.code-workspace", // Does not work
+  "mounts": [
+    "source=/dev/bus/usb,target=/dev/bus/usb,type=bind",
+    "source=/sys/bus/usb,target=/sys/bus/usb,type=bind"
+  ],
+  "runArgs": [
+    "--name","devcontainer-zephyr-esp32-xtensa-main",
+    // "--rm",
+    "-it",
+    "--privileged",
+    "--pid=host"
+    // "--device","/dev/ttyUSB0", // map specific serial devices to docker container
+    // "--device","/dev/ttyACM0"
+  ],
+  "remoteUser": "root"
+}
