@@ -1,0 +1,36 @@
+# Dockerfile adds Swiss Post root and intermediate CA certificates
+# This is not needed outside Swiss Post environment
+
+FROM erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.36
+
+USER root
+
+# HTTPS downloads must already be trusted by the base image.
+# If corporate TLS interception prevents this, provision a trusted bootstrap CA first.
+# Post CA source: https://gitit.post.ch/projects/PKI/repos/cacerts/browse
+RUN set -eu; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends ca-certificates curl unzip openssl; \
+    temporary_directory="$(mktemp -d)"; \
+    trap 'rm -rf "$temporary_directory"' EXIT; \
+    curl --fail --show-error --silent --location --connect-timeout 30 --max-time 120 \
+        "https://artifactory.tools.post.ch/artifactory/list/config-local/ch/post/it/pki/cacerts/rootca/RootCA-PEM.zip" \
+        -o "$temporary_directory/RootCA-PEM.zip"; \
+    curl --fail --show-error --silent --location --connect-timeout 30 --max-time 120 \
+        "https://artifactory.tools.post.ch/artifactory/list/config-local/ch/post/it/pki/cacerts/intermediateca/IntermediateCA-PEM.zip" \
+        -o "$temporary_directory/IntermediateCA-PEM.zip"; \
+    mkdir -p /usr/local/share/ca-certificates/post/rootca \
+        /usr/local/share/ca-certificates/post/intermediateca; \
+    unzip -q "$temporary_directory/RootCA-PEM.zip" \
+        -d /usr/local/share/ca-certificates/post/rootca; \
+    unzip -q "$temporary_directory/IntermediateCA-PEM.zip" \
+        -d /usr/local/share/ca-certificates/post/intermediateca; \
+    find /usr/local/share/ca-certificates/post -type f -name "*.pem" \
+        -exec sh -ec 'for certificate do \
+            openssl x509 -inform PEM -in "$certificate" -out "${certificate%.pem}.crt"; \
+            rm "$certificate"; \
+        done' sh {} +; \
+    test -n "$(find /usr/local/share/ca-certificates/post/rootca -type f -name '*.crt' -print -quit)"; \
+    test -n "$(find /usr/local/share/ca-certificates/post/intermediateca -type f -name '*.crt' -print -quit)"; \
+    update-ca-certificates; \
+    rm -rf /var/lib/apt/lists/*
