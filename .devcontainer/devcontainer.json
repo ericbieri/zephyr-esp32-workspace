@@ -1,7 +1,7 @@
 {
   "name": "Zephyr development environment for ESP32 Xtensa MCUs",
   "build": {
-    "dockerfile": "Dockerfile-swiss-post"
+    "dockerfile": "Dockerfile.swiss-post"
   },
   "customizations": {
     "vscode": {
@@ -23,7 +23,7 @@
   // ],
   "runArgs": [
     "--name","devcontainer-zephyr-esp32-xtensa-main",
-    "--add-host=host.docker.internal:host-gateway", // Required in Swiss Post environment23
+    "--add-host=host.docker.internal:host-gateway", // Required in the Swiss Post environment
     // "--rm",
     "-it",
     "--privileged",
