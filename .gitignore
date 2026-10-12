@@ -5,3 +5,4 @@
 .vscode/launch-old.json
 .vscode/tasks-old.json
 01_blink/venv/**
+.DS_Store

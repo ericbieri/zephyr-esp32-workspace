@@ -23,6 +23,7 @@
   // ],
   "runArgs": [
     "--name","devcontainer-zephyr-esp32-xtensa-main",
+    "--add-host=host.docker.internal:host-gateway", // Required in Swiss Post environment23
     // "--rm",
     "-it",
     "--privileged",
