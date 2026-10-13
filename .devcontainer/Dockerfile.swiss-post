@@ -1,7 +1,7 @@
 # Dockerfile adds Swiss Post root and intermediate CA certificates
 # This is not needed outside Swiss Post environment
 
-FROM erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.38
+FROM erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.41
 
 USER root
 

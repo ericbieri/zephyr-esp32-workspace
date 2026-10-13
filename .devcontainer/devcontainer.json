@@ -1,8 +1,8 @@
 {
   "name": "Zephyr development environment for ESP32 Xtensa MCUs",
   "build": {
-    "dockerfile": "erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.38"
-    // "dockerfile": "Dockerfile.swiss-post"
+    // "dockerfile": "erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.41"
+    "dockerfile": "Dockerfile.swiss-post"
   },
   "customizations": {
     "vscode": {
@@ -15,7 +15,7 @@
     }
   },
   "forwardPorts": [],
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "workspaceMount": "source=${localWorkspaceFolder}/workspace,target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",
   // "postStartCommand": "code --file-uri /zephyr.code-workspace", // Does not work
   // "mounts": [

@@ -1,5 +1,8 @@
 .idea/**
 *.iml
+/workspace
+/ws2
+
 
 01_blink/build/**
 .vscode/launch-old.json
