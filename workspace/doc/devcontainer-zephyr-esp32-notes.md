@@ -1,0 +1,251 @@
+# DevContainer Zehpyr ESP32 Notes 
+
+## Start DevContainer
+* Reopen Project in Container -> Command Palette (Ctrl+Shift+P, F1)
+* Check in devcontainer.json if DevContainer is build from image (default) or build.
+
+###  Links
+* [VS Code - Keyboard shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf)
+
+## Build code
+* Change to project dir /workspace/apps/01_blink
+
+### ESP32
+* Set CONFIG_ESP32_USE_UNSUPPORTED_REVISION=y in prj.conf (Feather ESP32 uses an old V1.0 Core)
+* west build -p always -b esp32_devkitc_wroom/esp32/procpu -- -DDTC_OVERLAY_FILE=boards/esp32_devkitc_wroom.overlay debug/openocd-esp32/bin/openocd -DOPENOCD_DEFAULT_PATH=/opt/toolchains/debug/xpack-openocd-0.12.0-7/openocd/scripts/ -DCONFIG_BUILD_OUTPUT_HEX=y 
+* west build -b esp32_devkitc_wrover/esp32/procpu 
+* Test in PIO to see what the openocd string looks like
+
+### ESP32-S3
+* west build -p always -b esp32s3_devkitc/esp32s3/procpu -- -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay debug/openocd-esp32s3/bin/openocd -DOPENOCD_DEFAULT_PATH=/opt/toolchains/debug/openocd-esp32s3/share/openocd/scripts -DCONFIG_DEBUG_OPTIMIZATIONS=y
+
+### ESP32-C6
+* west build -p always -b esp32c6_devkitc -- -DDTC_OVERLAY_FILE=boards/esp32c6_devkitc.overlay -DCONFIG_BUILD_OUTPUT_HEX=y -DCONFIG_DEBUG=y -DOPENOCD=/opt/toolchains/
+
+#### TODO
+* Shorten Commands with CMakePresets?
+* Set ZEPHYR_TOOLCHAIN_VARIANT & ZEPHYR_SDK_INSTALL_DIR
+
+## Flash code
+### west
+* __Toolchains & Version infos__: west sdk 
+* __Kconfig__: west build -t menuconfig
+* __Flash with ESP Runner__cd b
+	* west flash --runner esp32 --esp-device /dev/ttyACM0
+	* west flash --runner esp32 --esp-device /dev/ttyACM1 	// J-TAG
+
+	west flash --runner esp32 --esp-device /dev/ttyUSB0
+	TIP: get USB to tty mapping: dmesg -T | grep tty
+* // TODO verify & fix __OpenOCD__ 
+	* west flash --runner openocd --openocd-extra-init "hla_serial 5A79065086"
+	* west flash --runner openocd --openocd-extra-init "adapter serial 5A79065086"
+	* west flash --runner openocd --openocd-extra-init "ftdi_serial 641a4254d544ed11a35bcec90a86e0b4"
+
+* flashing using openocd
+	* /opt/toolchains/debug/openocd-esp32/bin/openocd \
+		-s /opt/toolchains/debug/openocd-esp32/share/openocd/scripts \
+		-f interface/ftdi/esp_ftdi.cfg \
+		-f target/esp32.cfg \
+		-c "adapter speed 20000" \
+		-c "init; halt; program_esp /workspace/01_blink/build/zephyr/zephyr.bin 0x10000 verify reset exit"
+	
+* __Get JTAG Device Serial__
+	* udevadm info --name=/dev/ttyACM0 --attribute-walk | grep serial
+	* ATTRS{serial}=="40:4C:CA:41:2C:0C" -> 404CCA412C0C
+
+### esptool // TODO test & fix
+* Check python version: python --version
+* Setup virtual env: python -m venv venv
+* Activate venv (on linux/mac): source venv/bin/activate
+* Install pyserial & esptool: python -m pip install pyserial==3.5 esptool==4.8.1
+* ESP32-C6: python -m esptool --port /dev/ttyACM0 --chip auto --baud 921600 --before default_reset --after hard_reset write_flash -u --flash_size detect 0x0 ./workspace/apps/01_blink/build/zephyr/zephyr.bin
+
+# Debugging with OpenOCD and GDB
+## OpenOCD
+### Links
+* [https://openocd.org/](https://openocd.org/)
+* [OpenOCD - Doc](https://openocd.org/doc-release/html/index.html)
+* [OpenOCD - Github](https://github.com/openocd-org/openocd)
+* [OpenOCD - Espressif - Github](https://github.com/espressif/openocd-esp32)
+* [Espressif - Configure ESP32-S3 Built-in JTAG Interface](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/api-guides/jtag-debugging/configure-builtin-jtag.html)
+* [Youtube - ESP32 Debugging your ESP-IDF code using JTAG](https://www.youtube.com/watch?v=uq93H7T7cOQ)
+
+### Run
+// TODO Shorten Path add to PATH?
+* openocd -f /opt/toolchains/debug/xpack-openocd-0.12.0-7/openocd/scripts/board/esp32s3-builtin.cfg
+* openocd -f /opt/toolchains/debug/openocd-esp32/share/openocd/scripts/board/esp32s3-builtin.cfg
+* 
+
+### Run OpenOCD inside VSCode
+* task.json
+// TODO configuer VSCode as shown in Youtube video
+
+### Run on host - deprecated
+* openocd -s share/openocd/scripts/ -c 'set ESP_RTOS none; set ESP_FLASH_SIZE 0' -f board/esp32c6-builtin.cfg
+* See also [openocd-esp32 on esp32-c6 (OCD-1053)](https://github.com/espressif/openocd-esp32/issues/350#issuecomment-2571331057)
+* [OpenOCD config files](https://github.com/espressif/openocd-esp32/tree/master/tcl/board)
+
+#### Install manually
+* Download latest [openocd-esp32](https://github.com/espressif/openocd-esp32/releases)
+* Move openocd-esp32 to /opt
+* USB
+* unzip: tar -xzf openocd-esp32-*.tar.gz
+* chown -R root:root openocd-esp32
+* Add path to ~/.zshrc
+  * export PATH=/opt/openocd-esp32/bin:$PATH
+  * export OPENOCD_SCRIPTS=/path/to/openocd-esp32/share/openocd/scripts
+  * openocd -f board/esp32c6-builtin.cfg
+  * export PATH=/Applications/openocd-esp32/bin:$PATH
+  * export OPENOCD_SCRIPTS=/path/to/openocd-esp32/share/openocd/scripts
+openocd -f board/esp32c6-builtin.cfg
+
+## GDB 
+### Links
+* [GNU Project Debugger](https://sourceware.org/gdb/)
+* [Quick Guide to GDB](https://beej.us/guide/bggdb/)
+* [Espressif IDF - Debug Project in VSCode](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/debugproject.html)
+
+### Run GDB (in devcontainer)
+* /opt/toolchains/zephyr-sdk-0.17.4/xtensa-espressif_esp32s3_zephyr-elf/bin/xtensa-espressif_esp32s3_zephyr-elf-gdb build/zephyr/zephyr.elf
+* /opt/toolchains/zephyr-sdk-0.17.4/xtensa-espressif_esp32_zephyr-elf/bin/xtensa-espressif_esp32_zephyr-elf-gdb build/zephyr/zephyr.elf
+### Debugging - GDB CLI
+* target extended-remote localhost:3333
+* mon reset halt
+* optional: file /workspace/01_blink/build/zephyr/zephyr.elf
+* break main
+* break main.c:31
+* continue
+* list
+* detach
+* exit
+
+# UDEV Rules (Must be installled on host OS)
+udev (userspace /dev) is a device manager for the Linux kernel. udev primarily manages device nodes in the /dev directory. At the same time, udev also handles all user space events raised when hardware devices are added into the system or removed from it, including firmware loading as required by certain devices.
+
+## UDEV Rules files
+* __PlatformIO UDEV Rules__ 
+	* [PlatformIO - Doc - UDEV Rules](https://docs.platformio.org/en/stable/core/installation/udev-rules.html)
+	* [Github - PlatformIO - 99-platformio-udev.rules](https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/system/99-platformio-udev.rules)
+* __Zephyr SDK - UDEV Rules__ 
+	* [Github - Zephyrproject - SDK](https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.4/zephyr-sdk-0.17.4_linux-x86_64_minimal.tar.xz)
+* __Install & Reload UDEV Rules__ 
+	* cp /zephyr-sdk-0.17.4/sysroots/x86_64-pokysdk-linux/usr/share/openocd/contrib/60-openocd.rules /etc/udev/rules.d
+	* sudo udevadm control --reload
+
+
+## Extensions
+* gitrepo Extension Frage ausblenden?
+
+# Hardware
+* [Zephyr - ESP32-S3-DevKitC](https://docs.zephyrproject.org/latest/boards/espressif/esp32s3_devkitc/doc/index.html)
+
+# USB to Serial Chipsets
+* CP210x: brew install --cask silicon-labs-vcp-driver
+* CH3340
+	* https://github.com/WCHSoftGroup/ch34xser_macos
+	* PDF genau studieren
+	* Systemeinstellungen/Allgemein/Anmeldeobjekte & Erweiterungen/Treibererweiterungen -> click (i) -> enable Treibererweiterungen
+* FT2232: brew install --cask ftdi-vcp-driver
+
+
+
+# Zephyr Tutorials
+* [Introduction to Zephyr - Digikey](https://www.youtube.com/watch?v=mTJ_vKlMS_4&list=PLEBQazB0HUyTmK2zdwhaf8bLwuEaDH-52)
+* [ESP32 on Zephyr OS](https://www.youtube.com/watch?v=Z_7y_4O7yTw&list=PLEQVp_6G_y4iFfemAbFsKw6tsGABarTwp)
+* [Set up Nordic nRF Connect SDK](https://docs.golioth.io/getting-started/device-examples/compile-example-code/zephyr-ncs/set-up-ncs/#install-the-zephyr-sdk-toolchain)
+
+
+## Links
+### DevContainer
+* https://code.visualstudio.com/docs/devcontainers/containers
+* https://mcuoneclipse.com/wp-content/uploads/2025/02/vs-code-devcontainer-with-debugging.png
+
+### JLink
+* https://mcuoneclipse.com/2025/02/18/remote-debugging-with-devcontainer-and-vs-code/
+
+### JTAG
+* https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/jtag-debugging/index.html
+* https://www.visualmicro.com/page/User-Guide.aspx?doc=index
+
+### Datasheets
+* https://documentation.espressif.com/esp32-s3_datasheet_en.pdf
+
+### Hardware / DevKits 
+* [ESP32-S3-DevKit-C](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide_v1.1.html#getting-started)
+
+## Todo
+* Configuration
+	* Wie kann ich am besten die Umgebung konfigurieren?
+* Docker
+	* USBIP auf osx, win und Linux aufsetzen
+	* Review Code with Copilot
+* OpenOCD
+	* Autostart OpenOCD with Debbuger -> add Problemmatcher
+	* JTag connect / disconnect
+	* Problem it JTAG port, ist teiweise nicht mehr sichtbar, kann nicht mit VM verbunden werden.
+* GDB
+	* Cannot set more than two HW Breakpoints
+* Build
+	* Compiler für debug optimieren / West?
+* Deploy FW
+	* Deploy FW using JTAG -> see Video
+* USBIP
+	* Shutting down container does not terminate the connections to USBIP Server -> Service
+* Program
+	* 01_blink
+		* richtige LED auf Board blinken lassen
+		* rename project
+* Versions
+	* Update Versions
+* Target MCUs
+	* ESP32, ESP32S3, ESP32S2
+* Github
+	* Definitive Github Account?
+	
+* Documentation
+	* Wiki Pages on Github
+	* QuickStart (ESP32, ESP32-S2, ESP32-S3 DevKits)
+	* Introduction
+		* Goals (Pain, Complexity, Lightweight)
+			* What is the container for, what not?
+			* AI Github
+			* Free of Charge
+		* Zephyr
+		* Devcontainer: 
+			* Intro
+			* DevContainer Naming, Architecture, ...
+		* Debug 
+	* Install
+		* Prerequisites
+		* Document Versions
+		* USBIP RPI Client Setup
+			* Start/Stop Scripts
+	* Detailliertere Doku je Thema
+	* Debugger Setup
+	* Links Page?
+* DevContainer MCU Stacks
+	* ESP32-RISCV
+	* ESP32-Xtensa
+	* nRF5x-ARM
+	* STM32-ARM
+	* RPI-Pico
+* Github
+	* Space for Embedded DevContainers?
+	* Actions
+		* Release Tagging
+
+## Next Steps
+* ESP32-S3 ist die E-Fuse gesetzt?
+* Test ESP32 with ESPProg JTAG debugger auf PIO
+	* Test in DevContainer macOS
+	* OpenOCD & GDB settings extrahieren 
+	* OpenOCD & GDB via CLI / Task starten
+
+
+* Setup (Server: ESP32S3, RPI), OSX (VSCode, Docker)
+	* Fix & document existing setup first 
+
+
+
+
+
