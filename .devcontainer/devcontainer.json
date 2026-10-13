@@ -1,9 +1,11 @@
 {
   "name": "Zephyr development environment for ESP32 Xtensa MCUs",
-  "build": {
-    // "dockerfile": "erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.41"
-    "dockerfile": "Dockerfile.swiss-post"
-  },
+  "image": "erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.41",
+  // To build the Swiss Post variant instead of pulling the published image, replace
+  // the "image" property above with:
+  // "build": {
+  //   "dockerfile": "Dockerfile.swiss-post"
+  // },
   "customizations": {
     "vscode": {
       "extensions": [
