@@ -20,19 +20,19 @@
   "workspaceMount": "source=${localWorkspaceFolder}/workspace,target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",
   // "postStartCommand": "code --file-uri /zephyr.code-workspace", // Does not work
-  // "mounts": [
-  //   "source=/dev/bus/usb,target=/dev/bus/usb,type=bind",
-  //   "source=/sys/bus/usb,target=/sys/bus/usb,type=bind"
-  // ],
+  "mounts": [
+    "source=/dev/bus/usb,target=/dev/bus/usb,type=bind"
+    // "source=/sys/bus/usb,target=/sys/bus/usb,type=bind"
+  ],
   "runArgs": [
     "--name","devcontainer-zephyr-esp32-xtensa-main",
     "--add-host=host.docker.internal:host-gateway", // Required if "dns" is set in the Docker Desktop settings
     // "--rm",
     "-it",
-    //"--privileged", // Works only on Linux hosts! Not recommended for security reasons.
-    "--pid=host"
-    // "--device","/dev/ttyUSB0", // map specific serial devices to docker container
-    // "--device","/dev/ttyACM0"
+    "--privileged", // Works only on Linux hosts! Not recommended for security reasons.
+    "--pid=host",
+    // "--device=/dev/ttyACM0", // map specific serial devices to docker container
+    // "--device=/dev/ttyACM1"
   ],
   "remoteUser": "root"
 }

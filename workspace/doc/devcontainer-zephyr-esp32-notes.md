@@ -99,6 +99,30 @@
   * export OPENOCD_SCRIPTS=/path/to/openocd-esp32/share/openocd/scripts
 openocd -f board/esp32c6-builtin.cfg
 
+### OpenOCD debian - 2026.10.14
+  "runArgs": [
+    "--privileged",
+    "--volume=/dev/bus/usb:/dev/bus/usb",
+    "--device-cgroup-rule=c 189:* rmw"
+  ]
+
+ls -l /dev/bus/usb/*/*
+
+/opt/toolchains/debug/openocd-esp32/bin/openocd \
+  -s /opt/toolchains/debug/openocd-esp32/share/openocd/scripts \
+  -f board/esp32s3-builtin.cfg \
+  -c 'set ESP_RTOS none' \
+  -c 'adapter speed 20000' \
+  -c 'tcl port 6666' \
+  -c 'telnet port 4444' \
+  -c 'gdb port 3333'
+
+sudo apt install -y iputils-ping
+
+
+
+
+
 ## GDB 
 ### Links
 * [GNU Project Debugger](https://sourceware.org/gdb/)
@@ -112,8 +136,12 @@ openocd -f board/esp32c6-builtin.cfg
 * target extended-remote localhost:3333
 * mon reset halt
 * optional: file /workspace/01_blink/build/zephyr/zephyr.elf
-* break main
-* break main.c:31
+* For ESP32-S3 flash software breakpoints, set `esp appimage_offset 0x10000` in the OpenOCD command line or config file before GDB connects. Setting it later with `monitor esp appimage_offset 0x10000` is too late for the initial memory map.
+* For ESP32-S3 code running from flash (`0x4200....`), GDB may use either hardware breakpoints or OpenOCD-managed flash software breakpoints when flash mappings are configured correctly.
+* IRAM code can use normal software breakpoints directly because that memory is writable.
+* The chip only has 2 true hardware breakpoints, so keep at least one free when you want `next` to step over calls reliably.
+* hbreak main
+* hbreak main.c:31
 * continue
 * list
 * detach
@@ -244,8 +272,5 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 
 * Setup (Server: ESP32S3, RPI), OSX (VSCode, Docker)
 	* Fix & document existing setup first 
-
-
-
 
 
