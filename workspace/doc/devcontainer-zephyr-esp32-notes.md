@@ -17,7 +17,7 @@
 * Test in PIO to see what the openocd string looks like
 
 ### ESP32-S3
-* west build -p always -b esp32s3_devkitc/esp32s3/procpu -- -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay debug/openocd-esp32s3/bin/openocd -DOPENOCD_DEFAULT_PATH=/opt/toolchains/debug/openocd-esp32s3/share/openocd/scripts -DCONFIG_DEBUG_OPTIMIZATIONS=y
+* west build -b esp32s3_devkitc/esp32s3/procpu -- -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay -DOPENOCD_DEFAULT_PATH=$OPENOCD_ESP32_ROOT/share/openocd/scripts -DCONFIG_DEBUG_OPTIMIZATIONS=y
 
 ### ESP32-C6
 * west build -p always -b esp32c6_devkitc -- -DDTC_OVERLAY_FILE=boards/esp32c6_devkitc.overlay -DCONFIG_BUILD_OUTPUT_HEX=y -DCONFIG_DEBUG=y -DOPENOCD=/opt/toolchains/

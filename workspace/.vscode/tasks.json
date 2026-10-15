@@ -1,46 +1,46 @@
 {
   "version": "2.0.0",
   "tasks": [
-    {
-      "label": "OpenOCD-ESP32-S3",
-      "type": "shell",
-      "command": "/opt/toolchains/debug/openocd-esp32/bin/openocd",
-      "args": [
-        "-s","/opt/toolchains/debug/openocd-esp32/share/openocd/scripts",
-        "-f","openocd/openocd-esp32s3-zephyr.cfg"
-      ],
-      "isBackground": true,
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": {
-        "owner": "custom",
-        "pattern": {
-          "regexp": "^(?!)"
-        },
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": ".",
-          "endsPattern": "Listening on port 3333 for gdb connections"
-        }
-      }
-    },
+    // {
+    //   "label": "OpenOCD-ESP32-S3",
+    //   "type": "shell",
+    //   "command": "${env:OPENOCD_ESP32_ROOT}/bin/openocd",
+    //   "args": [
+    //     "-s","${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
+    //     "-f","openocd/openocd-esp32s3-zephyr.cfg"
+    //   ],
+    //   "isBackground": true,
+    //   "presentation": {
+    //     "echo": true,
+    //     "reveal": "always",
+    //     "focus": false,
+    //     "panel": "shared"
+    //   },
+    //   "options": {
+    //     "cwd": "${workspaceFolder}"
+    //   },
+    //   "problemMatcher": {
+    //     "owner": "custom",
+    //     "pattern": {
+    //       "regexp": "^(?!)"
+    //     },
+    //     "background": {
+    //       "activeOnStart": true,
+    //       "beginsPattern": ".",
+    //       "endsPattern": "Listening on port 3333 for gdb connections"
+    //     }
+    //   }
+    // },
     {
       "label": "OpenOCD ESP32 - Upload",
       "type": "shell",
-      "command": "/opt/toolchains/debug/openocd-esp32/bin/openocd",
+      "command": "${env:OPENOCD_ESP32_ROOT}/bin/openocd",
       "args": [
-        "-s","/opt/toolchains/debug/openocd-esp32/share/openocd/scripts",
+        "-s","${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
         "-f", "interface/ftdi/esp_ftdi.cfg",
         "-f", "target/esp32.cfg",
         "-c", "adapter speed 20000",
-        "-c", "init; halt; program_esp /workspace/01_blink/build/zephyr/zephyr.bin 0x10000 verify reset exit"
+        "-c", "init; halt; program_esp ${env:PROJECT_ROOT}/build/zephyr/zephyr.bin 0x10000 verify reset exit"
       ],
       "isBackground": false,
       "presentation": {
@@ -57,12 +57,12 @@
     {
       "label": "OpenOCD ESP32S3 - Upload",
       "type": "shell",
-      "command": "/opt/toolchains/debug/openocd-esp32/bin/openocd",
+      "command": "${env:OPENOCD_ESP32_ROOT}/bin/openocd",
       "args": [
-        "-s","/opt/toolchains/debug/openocd-esp32/share/openocd/scripts",
+        "-s","${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
         "-f","board/esp32s3-builtin.cfg",
         "-c", "adapter speed 20000",
-        "-c", "init; halt; program_esp /workspace/01_blink/build/zephyr/zephyr.bin 0x10000 verify reset exit"
+        "-c", "init; halt; program_esp ${env:PROJECT_ROOT}/build/zephyr/zephyr.bin 0x10000 verify reset exit"
       ],
       "isBackground": false,
       "presentation": {
@@ -79,14 +79,14 @@
     {
       "label": "GDB - ESP32",
       "type": "shell",
-      "command": "/opt/toolchains/zephyr-sdk-0.17.4/xtensa-espressif_esp32_zephyr-elf/bin/xtensa-espressif_esp32_zephyr-elf-gdb",
+      "command": "${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_esp32_zephyr-elf/bin/xtensa-espressif_esp32_zephyr-elf-gdb",
       "args": [
         // "-q",
         // "-l 10",
         // "--interpreter=mi2",
-        // "--data-directory /opt/toolchains/zephyr-sdk-0.17.4/xtensa-espressif_esp32_zephyr-elf/share/gdb",
+        // "--data-directory ${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_esp32_zephyr-elf/share/gdb",
         // "-x", "${workspaceFolder}/scripts/gdb/esp32-disable-wdt.gdb",
-        "${workspaceFolder}/01_blink/build/zephyr/zephyr.elf"
+        "${env:PROJECT_ROOT}/build/zephyr/zephyr.elf"
       ],
       "isBackground": false,
       "presentation": {
@@ -96,21 +96,21 @@
         "panel": "shared"
       },
       "options": {
-        "cwd": "${workspaceFolder}/01_blink/build/"
+        "cwd": "${env:PROJECT_ROOT}/build/"
       },
       "problemMatcher": []
     },
     {
       "label": "GDB - ESP32S3",
       "type": "shell",
-      "command": "/opt/toolchains/zephyr-sdk-0.17.4/xtensa-espressif_esp32s3_zephyr-elf/bin/xtensa-espressif_esp32s3_zephyr-elf-gdb",
+      "command": "${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_esp32s3_zephyr-elf/bin/xtensa-espressif_esp32s3_zephyr-elf-gdb",
       "args": [
         // "-q",
         // "-l 10",
         // "--interpreter=mi2",
-        // "--data-directory /opt/toolchains/zephyr-sdk-0.17.4/xtensa-espressif_esp32s3_zephyr-elf/share/gdb",
+        // "--data-directory ${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_esp32s3_zephyr-elf/share/gdb",
         // "-x", "${workspaceFolder}/scripts/gdb/esp32-disable-wdt.gdb",
-        "${workspaceFolder}/01_blink/build/zephyr/zephyr.elf"
+        "${env:PROJECT_ROOT}/build/zephyr/zephyr.elf"
       ],
       "isBackground": false,
       "presentation": {
@@ -120,7 +120,7 @@
         "panel": "shared"
       },
       "options": {
-        "cwd": "${workspaceFolder}/01_blink/build/"
+        "cwd": "${env:PROJECT_ROOT}/build/"
       },
       "problemMatcher": []
     }

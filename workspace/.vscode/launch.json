@@ -2,13 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "preLaunchTask": "OpenOCD-ESP32-S3",
-            "name": "OpenOCD - ESP32-S3",
+            "name": "OpenOCD-ESP32-S3",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "\"${env:OPENOCD_ESP32_ROOT}/bin/openocd\" -s \"${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts\" -f \"openocd/openocd-esp32s3-zephyr.cfg\"",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "GDB-ESP32-S3",
             "type": "cppdbg",
             "request": "launch",
-            "cwd":  "${workspaceFolder}/zephyr-esp32-intro-shawn-hymel/apps/01_blink/build/",
-            "program": "${workspaceFolder}/zephyr-esp32-intro-shawn-hymel/apps/01_blink/build/zephyr/zephyr.elf",
-            "miDebuggerPath": "/opt/toolchains/zephyr-sdk-0.17.4/xtensa-espressif_esp32s3_zephyr-elf/bin/xtensa-espressif_esp32s3_zephyr-elf-gdb",
+            "cwd":  "${env:PROJECT_ROOT}/build/",
+            "program": "${env:PROJECT_ROOT}/build/zephyr/zephyr.elf",
+            "miDebuggerPath": "${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_esp32s3_zephyr-elf/bin/xtensa-espressif_esp32s3_zephyr-elf-gdb",
             "setupCommands": [
                 {"text": "set remotetimeout 30"},
                 {"text": "target extended-remote 127.0.0.1:3333"},
@@ -26,9 +32,9 @@
             "name": "ESP32 Debug - PIO",
             "type": "cppdbg",
             "request": "launch",
-            "cwd":  "${workspaceFolder}/zephyr-esp32-intro-shawn-hymel/apps/01_blink/build/",
-            "program": "${workspaceFolder}/zephyr-esp32-intro-shawn-hymel/apps/01_blink/build/zephyr/zephyr.elf",
-            "miDebuggerPath": "/opt/toolchains/zephyr-sdk-0.17.4/xtensa-espressif_esp32_zephyr-elf/bin/xtensa-espressif_esp32_zephyr-elf-gdb",
+            "cwd":  "${env:PROJECT_ROOT}/build/",
+            "program": "${env:PROJECT_ROOT}/build/zephyr/zephyr.elf",
+            "miDebuggerPath": "${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_esp32_zephyr-elf/bin/xtensa-espressif_esp32_zephyr-elf-gdb",
             "setupCommands": [
                 {"text": "set remotetimeout 30"},
                 {"text": "target extended-remote 127.0.0.1:3333"},
