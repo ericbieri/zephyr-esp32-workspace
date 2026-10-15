@@ -30,7 +30,7 @@
     // "--rm",
     "-it",
     "--privileged", // Works only on Linux hosts! Not recommended for security reasons.
-    "--pid=host",
+    "--pid=host"
     // "--device=/dev/ttyACM0", // map specific serial devices to docker container
     // "--device=/dev/ttyACM1"
   ],
