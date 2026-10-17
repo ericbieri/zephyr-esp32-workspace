@@ -2,12 +2,14 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "OpenOCD-ESP32-S3",
+      "label": "OpenOCD-ESP32",
       "type": "shell",
       "command": "${env:OPENOCD_ESP32_ROOT}/bin/openocd",
       "args": [
-        "-s","${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
-        "-f","openocd/openocd-${env:ESP_VARIANT}-zephyr.cfg"
+        "-s",
+        "${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
+        "-f",
+        "openocd/openocd-${config:esp32.variant}-zephyr.cfg"
       ],
       "isBackground": true,
       "presentation": {
@@ -36,11 +38,16 @@
       "type": "shell",
       "command": "${env:OPENOCD_ESP32_ROOT}/bin/openocd",
       "args": [
-        "-s","${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
-        "-f", "interface/ftdi/esp_ftdi.cfg",
-        "-f", "target/esp32.cfg",
-        "-c", "adapter speed 20000",
-        "-c", "init; halt; program_esp ${env:PROJECT_ROOT}/build/zephyr/zephyr.bin 0x10000 verify reset exit"
+        "-s",
+        "${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
+        "-f",
+        "interface/ftdi/esp_ftdi.cfg",
+        "-f",
+        "target/esp32.cfg",
+        "-c",
+        "adapter speed 20000",
+        "-c",
+        "init; halt; program_esp ${config:project.root}/build/zephyr/zephyr.bin 0x10000 verify reset exit"
       ],
       "isBackground": false,
       "presentation": {
@@ -59,10 +66,14 @@
       "type": "shell",
       "command": "${env:OPENOCD_ESP32_ROOT}/bin/openocd",
       "args": [
-        "-s","${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
-        "-f","board/${env:ESP_VARIANT}-builtin.cfg",
-        "-c", "adapter speed 20000",
-        "-c", "init; halt; program_esp ${env:PROJECT_ROOT}/build/zephyr/zephyr.bin 0x10000 verify reset exit"
+        "-s",
+        "${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
+        "-f",
+        "board/${config:esp32.variant}-builtin.cfg",
+        "-c",
+        "adapter speed 20000",
+        "-c",
+        "init; halt; program_esp ${config:project.root}/build/zephyr/zephyr.bin 0x10000 verify reset exit"
       ],
       "isBackground": false,
       "presentation": {
@@ -81,12 +92,7 @@
       "type": "shell",
       "command": "${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_esp32_zephyr-elf/bin/xtensa-espressif_esp32_zephyr-elf-gdb",
       "args": [
-        // "-q",
-        // "-l 10",
-        // "--interpreter=mi2",
-        // "--data-directory ${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_esp32_zephyr-elf/share/gdb",
-        // "-x", "${workspaceFolder}/scripts/gdb/esp32-disable-wdt.gdb",
-        "${env:PROJECT_ROOT}/build/zephyr/zephyr.elf"
+        "${config:project.root}/build/zephyr/zephyr.elf"
       ],
       "isBackground": false,
       "presentation": {
@@ -96,21 +102,16 @@
         "panel": "shared"
       },
       "options": {
-        "cwd": "${env:PROJECT_ROOT}/build/"
+        "cwd": "${config:project.root}/build/"
       },
       "problemMatcher": []
     },
     {
       "label": "GDB - ESP32S3",
       "type": "shell",
-      "command": "${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_${env:ESP_VARIANT}_zephyr-elf/bin/xtensa-espressif_${env:ESP_VARIANT}_zephyr-elf-gdb",
+      "command": "${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_${config:esp32.variant}_zephyr-elf/bin/xtensa-espressif_${config:esp32.variant}_zephyr-elf-gdb",
       "args": [
-        // "-q",
-        // "-l 10",
-        // "--interpreter=mi2",
-        // "--data-directory ${env:ZEPHYR_SDK_ROOT}/xtensa-espressif_${env:ESP_VARIANT}_zephyr-elf/share/gdb",
-        // "-x", "${workspaceFolder}/scripts/gdb/esp32-disable-wdt.gdb",
-        "${env:PROJECT_ROOT}/build/zephyr/zephyr.elf"
+        "${config:project.root}/build/zephyr/zephyr.elf"
       ],
       "isBackground": false,
       "presentation": {
@@ -120,7 +121,7 @@
         "panel": "shared"
       },
       "options": {
-        "cwd": "${env:PROJECT_ROOT}/build/"
+        "cwd": "${config:project.root}/build/"
       },
       "problemMatcher": []
     }

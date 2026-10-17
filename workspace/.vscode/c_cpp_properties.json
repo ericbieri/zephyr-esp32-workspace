@@ -15,7 +15,7 @@
             "cppStandard": "c++11",
             "intelliSenseMode": "linux-clang-x64",
             "compileCommands": [
-                "${env:PROJECT_ROOT}/build/compile_commands.json"
+                "${config:project.root}/build/compile_commands.json"
             ]
         }
     ],
