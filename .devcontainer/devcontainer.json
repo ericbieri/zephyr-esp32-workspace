@@ -1,6 +1,6 @@
 {
   "name": "Zephyr development environment for ESP32 Xtensa MCUs",
-  "image": "erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.46",
+  "image": "erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.47",
   // Use this Dockerfile if you are within the Swiss Post network
   // "build": {
   //   "dockerfile": "Dockerfile.swiss-post",
@@ -22,7 +22,9 @@
   // "postStartCommand": "code --file-uri /zephyr.code-workspace", // Does not work
   "mounts": [
     "source=/dev/bus/usb,target=/dev/bus/usb,type=bind",
-    "source=${localWorkspaceFolder}/workspace/repos,target=/workspace/repos,type=bind,consistency=cached"
+    "source=${localWorkspaceFolder}/workspace/repos,target=/workspace/repos,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/workspace/openocd,target=/workspace/openocd,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/workspace/doc,target=/workspace/doc,type=bind,consistency=cached"
     // "source=/sys/bus/usb,target=/sys/bus/usb,type=bind"
   ],
   "runArgs": [
