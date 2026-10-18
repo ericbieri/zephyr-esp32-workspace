@@ -20,7 +20,7 @@
 
 west build -p always \
   -b esp32_devkitc/esp32/procpu \
-  -d build \
+  -d build-esp32 \
   -- \
   -DDTC_OVERLAY_FILE=boards/esp32_devkitc_wroom.overlay \
   -DOPENOCD=/opt/openocd/bin/openocd \
@@ -55,7 +55,8 @@ west build -p always \
 	* west flash --runner esp32 --esp-device /dev/ttyACM0
 	* west flash --runner esp32 --esp-device /dev/ttyACM1 	// J-TAG
 
-	west flash --runner esp32 --esp-device /dev/ttyUSB0
+	west flash --runner esp32 --build-dir build-esp32 --esp-device /dev/ttyUSB1
+	
 	TIP: get USB to tty mapping: dmesg -T | grep tty
 * // TODO verify & fix __OpenOCD__ 
 	* west flash --runner openocd --openocd-extra-init "hla_serial 5A79065086"
@@ -310,38 +311,7 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 
 # Zephyr Project Structure
 
-zephyr-workspace/
-├── .west/
-│   └── config                 # West workspace configuration
-├── zephyr/                    # Zephyr RTOS repository
-│   ├── arch/                  # CPU architectures
-│   ├── boards/                # Board definitions
-│   ├── drivers/               # Device drivers
-│   ├── kernel/                # Kernel implementation
-│   ├── subsys/                # Subsystems: Bluetooth, networking, etc.
-│   ├── include/               # Public headers
-│   ├── west.yml               # Zephyr manifest
-│   └── CMakeLists.txt
-├── modules/                   # External dependencies
-│   ├── hal/                   # Hardware abstraction layers
-│   ├── lib/                   # Libraries
-│   └── crypto/                # Cryptographic libraries
-├── bootloader/                # Optional MCUboot repository
-└── my_app/                    # Your application (example)
-    ├── CMakeLists.txt
-    ├── prj.conf
-    ├── Kconfig                 # Optional application Kconfig
-    ├── app.overlay             # Optional devicetree overlay
-    ├── boards/                 # Board-specific configuration
-    ├── src/
-    │   └── main.c
-    ├── include/
-    │   └── my_app.h
-    ├── dts/                    # Optional custom devicetree bindings
-    ├── tests/                  # Optional tests
-    └── README.md
-
-T1 Topology
+T1 Topology -> T1 chosen for devcontainer
 --------------------------
 workspace/                     # west topdir
 ├── .west/                     # marks the location of the topdir
