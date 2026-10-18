@@ -1,6 +1,6 @@
 {
   "name": "Zephyr development environment for ESP32 Xtensa MCUs",
-  "image": "erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.44",
+  "image": "erichbieri/devcontainer-zephyr-esp32-xtensa:0.0.46",
   // Use this Dockerfile if you are within the Swiss Post network
   // "build": {
   //   "dockerfile": "Dockerfile.swiss-post",
@@ -17,7 +17,7 @@
     }
   },
   "forwardPorts": [],
-  "workspaceMount": "source=${localWorkspaceFolder}/workspace,target=/workspace,type=bind,consistency=cached",
+  "workspaceMount": "source=${localWorkspaceFolder}/workspace/applications,target=/workspace/applications,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",
   // "postStartCommand": "code --file-uri /zephyr.code-workspace", // Does not work
   "mounts": [
@@ -25,7 +25,7 @@
     // "source=/sys/bus/usb,target=/sys/bus/usb,type=bind"
   ],
   "runArgs": [
-    "--name","devcontainer-zephyr-esp32-xtensa-main",
+    "--name","devcontainer-zephyr-esp32-xtensa",
     "--add-host=host.docker.internal:host-gateway", // Required if "dns" is set in the Docker Desktop settings
     // "--rm",
     "-it",

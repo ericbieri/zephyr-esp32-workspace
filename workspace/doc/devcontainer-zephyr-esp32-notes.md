@@ -16,8 +16,27 @@
 * west build -b esp32_devkitc_wrover/esp32/procpu 
 * Test in PIO to see what the openocd string looks like
 
+west build -p always \
+  -b esp32_devkitc/esp32/procpu \
+  -d build \
+  -- \
+  -DDTC_OVERLAY_FILE=boards/esp32_devkitc_wroom.overlay \
+  -DOPENOCD=/opt/openocd/bin/openocd \
+  -DOPENOCD_DEFAULT_PATH=/opt/openocd/share/openocd/scripts \
+  -DCONFIG_BUILD_OUTPUT_HEX=y
+
+
 ### ESP32-S3
 * west build -b esp32s3_devkitc/esp32s3/procpu -- -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay -DOPENOCD_DEFAULT_PATH=$OPENOCD_ESP32_ROOT/share/openocd/scripts -DCONFIG_DEBUG_OPTIMIZATIONS=y
+
+west build -p always \
+  -d /workspace/zephyr-esp32-intro-shawn-hymel/apps/01_blink/build \
+  -b esp32s3_devkitc/esp32s3/procpu \
+  -s /workspace/zephyr-esp32-intro-shawn-hymel/apps/01_blink \
+  -- \
+  -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay \
+  -DOPENOCD_DEFAULT_PATH=/opt/openocd/share/openocd/scripts \
+  -DCONFIG_DEBUG_OPTIMIZATIONS=y
 
 ### ESP32-C6
 * west build -p always -b esp32c6_devkitc -- -DDTC_OVERLAY_FILE=boards/esp32c6_devkitc.overlay -DCONFIG_BUILD_OUTPUT_HEX=y -DCONFIG_DEBUG=y -DOPENOCD=/opt/toolchains/
@@ -202,6 +221,9 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 * [ESP32-S3-DevKit-C](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide_v1.1.html#getting-started)
 
 ## Todo
+* ESP32 Variants
+	* 
+
 * Configuration
 	* Wie kann ich am besten die Umgebung konfigurieren?
 * Docker
@@ -261,6 +283,16 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 	* Space for Embedded DevContainers?
 	* Actions
 		* Release Tagging
+		* Release Notes with Versions also on Dockerhub?
+* Dockerfile
+	* Do I need all the env vars?
+	* Review file
+	* Can I make it smalle / faster?
+	
+
+
+
+
 
 ## Next Steps
 * ESP32-S3 ist die E-Fuse gesetzt?
@@ -272,5 +304,96 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 
 * Setup (Server: ESP32S3, RPI), OSX (VSCode, Docker)
 	* Fix & document existing setup first 
+
+
+# Zephyr Project Structure
+
+zephyr-workspace/
+├── .west/
+│   └── config                 # West workspace configuration
+├── zephyr/                    # Zephyr RTOS repository
+│   ├── arch/                  # CPU architectures
+│   ├── boards/                # Board definitions
+│   ├── drivers/               # Device drivers
+│   ├── kernel/                # Kernel implementation
+│   ├── subsys/                # Subsystems: Bluetooth, networking, etc.
+│   ├── include/               # Public headers
+│   ├── west.yml               # Zephyr manifest
+│   └── CMakeLists.txt
+├── modules/                   # External dependencies
+│   ├── hal/                   # Hardware abstraction layers
+│   ├── lib/                   # Libraries
+│   └── crypto/                # Cryptographic libraries
+├── bootloader/                # Optional MCUboot repository
+└── my_app/                    # Your application (example)
+    ├── CMakeLists.txt
+    ├── prj.conf
+    ├── Kconfig                 # Optional application Kconfig
+    ├── app.overlay             # Optional devicetree overlay
+    ├── boards/                 # Board-specific configuration
+    ├── src/
+    │   └── main.c
+    ├── include/
+    │   └── my_app.h
+    ├── dts/                    # Optional custom devicetree bindings
+    ├── tests/                  # Optional tests
+    └── README.md
+
+T1 Topology
+--------------------------
+workspace/                     # west topdir
+├── .west/                     # marks the location of the topdir
+│   └── config                 # per-workspace local configuration file
+│
+│   # The manifest repository, never modified by west after creation:
+├── zephyr/                    # .git/ repo
+│   ├── west.yml               # manifest file
+│   └── [... other files ...]
+│
+│   # Projects managed by west:
+├── modules/
+│   └── lib/
+│       └── zcbor/             # .git/ project
+│
+├── tools/
+│   └── net-tools/  
+│
+├── bootloader/  
+│
+├── applications/
+│   ├── blinky/
+│   └── hello-world/
+
+
+
+
+T3 _Topology
+----------------------------
+workspace/                     # west topdir
+├── .west/                     # marks the location of the topdir
+│   └── config                 # per-workspace local configuration file
+│
+│   # The manifest repository, never modified by west after creation:
+├── zephyr/                    # .git/ repo
+│   ├── west.yml               # manifest file
+│   └── [... other files ...]
+│
+├── manifest/                  # The central manifest
+│   └── west.yml
+│
+│   # Projects managed by west:
+├── modules/
+│   └── lib/
+│       └── zcbor/             # .git/ project
+│
+├── tools/
+│   └── net-tools/  
+│
+├── bootloader/  
+│
+├── applications/
+│   ├── blinky/
+│   └── hello-world/
+
 
 
