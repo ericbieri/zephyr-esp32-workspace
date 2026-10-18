@@ -5,8 +5,8 @@
             "name": "GDB-Debugger",
             "type": "cppdbg",
             "request": "launch",
-            "cwd":  "${config:project.root}/build/",
-            "program": "${config:project.root}/build/zephyr/zephyr.elf",
+            "cwd":  "${config:project.root}/build-${config:esp32.variant}/",
+            "program": "${config:project.root}/build-${config:esp32.variant}/zephyr/zephyr.elf",
             "miDebuggerPath": "${env:ZEPHYR_SDK_ROOT}/gnu/xtensa-espressif_${config:esp32.variant}_zephyr-elf/bin/xtensa-espressif_${config:esp32.variant}_zephyr-elf-gdb",
             "setupCommands": [
                 {"text": "set remotetimeout 30"},

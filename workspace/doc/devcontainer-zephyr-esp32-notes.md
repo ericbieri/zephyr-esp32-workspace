@@ -27,18 +27,17 @@ west build -p always \
   -DOPENOCD_DEFAULT_PATH=/opt/openocd/share/openocd/scripts \
   -DCONFIG_BUILD_OUTPUT_HEX=y
 
-
 ### ESP32-S3
-* west build -b esp32s3_devkitc/esp32s3/procpu -- -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay -DOPENOCD_DEFAULT_PATH=$OPENOCD_ESP32_ROOT/share/openocd/scripts -DCONFIG_DEBUG_OPTIMIZATIONS=y
-
-west build -p always \
-  -d /workspace/zephyr-esp32-intro-shawn-hymel/apps/01_blink/build \
+* west build -p always \
   -b esp32s3_devkitc/esp32s3/procpu \
-  -s /workspace/zephyr-esp32-intro-shawn-hymel/apps/01_blink \
+  -d build-esp32s3 \
   -- \
   -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay \
+  -DOPENOCD=/opt/openocd/bin/openocd \
   -DOPENOCD_DEFAULT_PATH=/opt/openocd/share/openocd/scripts \
-  -DCONFIG_DEBUG_OPTIMIZATIONS=y
+  -DCONFIG_BUILD_OUTPUT_HEX=y
+
+
 
 ### ESP32-C6
 * west build -p always -b esp32c6_devkitc -- -DDTC_OVERLAY_FILE=boards/esp32c6_devkitc.overlay -DCONFIG_BUILD_OUTPUT_HEX=y -DCONFIG_DEBUG=y -DOPENOCD=/opt/toolchains/
@@ -48,14 +47,22 @@ west build -p always \
 * Set ZEPHYR_TOOLCHAIN_VARIANT & ZEPHYR_SDK_INSTALL_DIR
 
 ## Flash code
+### VS Code OpenOCD task
+* Run **Tasks: Run Task** and select **west flash-OpenOCD**.
+* Uses `west flash --runner openocd --build-dir build-${config:esp32.variant} --config /workspace/openocd/openocd-${config:esp32.variant}-zephyr.cfg --verify` from the configured `project.root`.
+* Uses the selected build's firmware image and flash address, verifies flash contents, and resets the board to run.
+* Uses the workspace's Zephyr-specific OpenOCD configuration, including its `esp appimage_offset` flash mapping. Keep that offset aligned with the build's `CONFIG_FLASH_LOAD_OFFSET` when changing the boot layout.
+* Connect the board's JTAG interface (ESP32-S3 builtin USB-JTAG, or the board's configured external adapter). The serial `flash.device` setting is not used.
+* Stop any running OpenOCD task or debug session before flashing so the adapter is available.
+
 ### west
 * __Toolchains & Version infos__: west sdk 
 * __Kconfig__: west build -t menuconfig
 * __Flash with ESP Runner__cd b
-	* west flash --runner esp32 --esp-device /dev/ttyACM0
-	* west flash --runner esp32 --esp-device /dev/ttyACM1 	// J-TAG
+	* west flash --runner esp32 --build-dir build-esp32s3 --esp-device /dev/ttyACM0
+	* west flash --runner esp32 --build-dir build-esp32s3 --esp-device /dev/ttyACM1	// J-TAG
 
-	west flash --runner esp32 --build-dir build-esp32 --esp-device /dev/ttyUSB1
+	* west flash --runner esp32 --build-dir build-esp32 --esp-device /dev/ttyUSB1
 	
 	TIP: get USB to tty mapping: dmesg -T | grep tty
 * // TODO verify & fix __OpenOCD__ 
@@ -311,7 +318,39 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 
 # Zephyr Project Structure
 
-T1 Topology -> T1 chosen for devcontainer
+Current topology: separate manifest directory
+-------------------------------------------
+The active workspace manifest is `/workspace/manifest/west.yml`.
+It pins Zephyr to `v4.4.2` and imports Zephyr's dependency manifest and
+west commands. Keep `/workspace/zephyr/west.yml` unchanged: it is an
+upstream file used by the import, not the workspace's entry-point manifest.
+
+`/workspace/.west/config` selects the manifest directory and keeps the
+Zephyr source directory separate:
+
+```ini
+[manifest]
+path = manifest
+file = west.yml
+
+[zephyr]
+base = zephyr
+```
+
+To verify the configuration:
+
+```sh
+cd /workspace
+west manifest --path
+west manifest --validate
+west list zephyr hal_espressif hal_xtensa picolibc
+```
+
+After changing the pinned Zephyr version, run `west update` to synchronize
+dependencies before rebuilding. Application manifests under `repos/` are
+independent and do not select this workspace's active manifest.
+
+Previous T1 topology (reference only)
 --------------------------
 workspace/                     # west topdir
 ├── .west/                     # marks the location of the topdir
@@ -339,21 +378,21 @@ workspace/                     # west topdir
 
 
 
-T3 _Topology
+Current separate-manifest topology
 ----------------------------
 workspace/                     # west topdir
 ├── .west/                     # marks the location of the topdir
 │   └── config                 # per-workspace local configuration file
 │
-│   # The manifest repository, never modified by west after creation:
-├── zephyr/                    # .git/ repo
-│   ├── west.yml               # manifest file
-│   └── [... other files ...]
-│
-├── manifest/                  # The central manifest
-│   └── west.yml
+│   # Workspace manifest, maintained separately from Zephyr:
+├── manifest/
+│   └── west.yml               # pins Zephyr and imports its manifest
 │
 │   # Projects managed by west:
+├── zephyr/                    # upstream .git/ project, pinned to v4.4.2
+│   ├── west.yml               # imported upstream dependency manifest
+│   └── [... other files ...]
+│
 ├── modules/
 │   └── lib/
 │       └── zcbor/             # .git/ project
@@ -366,5 +405,3 @@ workspace/                     # west topdir
 ├── applications/
 │   ├── blinky/
 │   └── hello-world/
-
-

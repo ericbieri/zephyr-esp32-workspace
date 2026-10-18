@@ -25,13 +25,13 @@ manifest:
       groups:
         - fs
     - name: hal_espressif
-      revision: f07465053c0f24aa254d9fdfd559f06879221073
+      revision: 202c59552dc98e5cd02386313e1977ecb17a131f
       path: modules/hal/espressif
       west-commands: west/west-commands.yml
       groups:
         - hal
     - name: hal_xtensa
-      revision: 0495a1afd300b644d3ec8dd2c3bd11007e69a892
+      revision: baa56aa3e119b5aae43d16f9b2d2c8112e052871
       path: modules/hal/xtensa
       groups:
         - hal

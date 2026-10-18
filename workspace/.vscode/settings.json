@@ -1,5 +1,7 @@
 {
-    "project.root": "/workspace/zephyr-esp32-intro-shawn-hymel/apps/01_blink",
-    "esp32.variant": "esp32",
+    "project.root": "/workspace/applications/01_blink",
+    "esp32.variant": "esp32s3",
+    "board.variant": "esp32s3_devkitc",
+    "flash.device": "/dev/ttyACM1",
     "cmake.ignoreCMakeListsMissing": true
 }

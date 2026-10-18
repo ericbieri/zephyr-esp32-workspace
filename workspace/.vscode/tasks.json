@@ -2,14 +2,64 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "OpenOCD-ESP32",
+      "label": "west build",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "build",
+        "-p", "always",
+        "-b", "${config:board.variant}/${config:esp32.variant}/procpu",
+        "-d", "build-${config:esp32.variant}",
+        "--",
+        "-DDTC_OVERLAY_FILE=boards/${config:board.variant}.overlay",
+        "-DOPENOCD=${env:OPENOCD_ESP32_ROOT}/bin/openocd",
+        "-DOPENOCD_DEFAULT_PATH=${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
+        "-DCONFIG_BUILD_OUTPUT_HEX=y"
+      ],
+      "group": "build",
+      "options": {
+        "cwd": "${config:project.root}"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "west flash - esptool",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "flash",
+        "--runner", "esp32",
+        "--build-dir", "build-${config:esp32.variant}",
+        "--esp-device", "${config:flash.device}",
+      ],
+      "options": {
+        "cwd": "${config:project.root}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "west flash - OpenOCD",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "flash",
+        "--runner", "openocd",
+        "--build-dir", "build-${config:esp32.variant}",
+        "--config", "${workspaceFolder}/openocd/openocd-${config:esp32.variant}-zephyr.cfg",
+        "--verify"
+      ],
+      "options": {
+        "cwd": "${config:project.root}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "OpenOCD",
       "type": "shell",
       "command": "${env:OPENOCD_ESP32_ROOT}/bin/openocd",
       "args": [
-        "-s",
-        "${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
-        "-f",
-        "openocd/openocd-${config:esp32.variant}-zephyr.cfg"
+        "-s", "${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
+        "-f", "openocd/openocd-${config:esp32.variant}-zephyr.cfg"
       ],
       "isBackground": true,
       "presentation": {
