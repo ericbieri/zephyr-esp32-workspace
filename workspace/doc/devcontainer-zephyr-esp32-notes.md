@@ -321,9 +321,9 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 Current topology: separate manifest directory
 -------------------------------------------
 The active workspace manifest is `/workspace/manifest/west.yml`.
-It pins Zephyr to `v4.4.2` and imports Zephyr's dependency manifest and
-west commands. Keep `/workspace/zephyr/west.yml` unchanged: it is an
-upstream file used by the import, not the workspace's entry-point manifest.
+It pins Zephyr to `v4.4.2`, records the workspace dependencies, and loads
+Zephyr's west commands. `/workspace/zephyr/west.yml` is no longer the
+workspace's entry-point manifest.
 
 `/workspace/.west/config` selects the manifest directory and keeps the
 Zephyr source directory separate:

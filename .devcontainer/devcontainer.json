@@ -23,6 +23,7 @@
   "mounts": [
     "source=/dev/bus/usb,target=/dev/bus/usb,type=bind",
     "source=${localWorkspaceFolder}/workspace/.vscode,target=/workspace/.vscode,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/workspace/manifest,target=/workspace/manifest,type=bind,consistency=cached",
     "source=${localWorkspaceFolder}/workspace/repos,target=/workspace/repos,type=bind,consistency=cached",
     "source=${localWorkspaceFolder}/workspace/openocd,target=/workspace/openocd,type=bind,consistency=cached",
     "source=${localWorkspaceFolder}/workspace/doc,target=/workspace/doc,type=bind,consistency=cached",
