@@ -21,7 +21,8 @@
   "workspaceFolder": "/workspace",
   // "postStartCommand": "code --file-uri /zephyr.code-workspace", // Does not work
   "mounts": [
-    "source=/dev/bus/usb,target=/dev/bus/usb,type=bind"
+    "source=/dev/bus/usb,target=/dev/bus/usb,type=bind",
+    "source=${localWorkspaceFolder}/workspace/repos,target=/workspace/repos,type=bind,consistency=cached"
     // "source=/sys/bus/usb,target=/sys/bus/usb,type=bind"
   ],
   "runArgs": [

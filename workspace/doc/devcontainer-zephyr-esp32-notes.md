@@ -3,6 +3,8 @@
 ## Start DevContainer
 * Reopen Project in Container -> Command Palette (Ctrl+Shift+P, F1)
 * Check in devcontainer.json if DevContainer is build from image (default) or build.
+* The checkout's `repos/` directory is bind-mounted at `/repos` inside the container. Create it on the Docker host before reopening (`mkdir -p repos` from the project root); it is not tracked by Git. The source uses `${localWorkspaceFolder}/repos`, not the host's `/repos`.
+* After changing mounts, run **Dev Containers: Rebuild and Reopen in Container** from the Command Palette.
 
 ###  Links
 * [VS Code - Keyboard shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf)
@@ -394,6 +396,5 @@ workspace/                     # west topdir
 ├── applications/
 │   ├── blinky/
 │   └── hello-world/
-
 
 
