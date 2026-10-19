@@ -37,6 +37,9 @@ west build -p always \
   -DOPENOCD_DEFAULT_PATH=/opt/openocd/share/openocd/scripts \
   -DCONFIG_BUILD_OUTPUT_HEX=y
 
+cd /workspace
+west update hal_espressif
+west blobs fetch hal_espressif
 
 
 ### ESP32-C6

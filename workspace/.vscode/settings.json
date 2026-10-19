@@ -1,13 +1,13 @@
 {
     "project.root": "/workspace/applications/01_blink",
 
-    // ESP32-S2 configuration
-    "esp32.variant": "esp32s2",
-    "board.variant": "esp32s2_saola/esp32s2",
-    "board.overlay": "boards/esp32s2_saola.overlay",
-    "flash.device": "/dev/ttyUSB0",
+    // ESP32-S2 configuration (requires ESP32Prog for debugging)
+    // "esp32.variant": "esp32s2",
+    // "board.variant": "esp32s2_saola/esp32s2",
+    // "board.overlay": "boards/esp32s2_saola.overlay",
+    // "flash.device": "/dev/ttyUSB0",
 
-    // ESP32-S3 configuration
+    // ESP32-S3 configuration (builtin USB-JTAG)
     // "esp32.variant": "esp32s3",
     // "board.variant": "esp32s3_devkitc/esp32s3/procpu",
     // "board.overlay": "boards/esp32s3_devkitc.overlay",
