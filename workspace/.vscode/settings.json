@@ -20,9 +20,15 @@
     // "flash.device": "/dev/ttyACM0",
     
     // ESP32-C6 configuration (builtin USB-JTAG)
-    "esp32.variant": "esp32c6",
-    "board.variant": "esp32c6_devkitc/esp32c6/hpcore",
-    "board.overlay": "boards/esp32c6_devkitc.overlay",
+    // "esp32.variant": "esp32c6",
+    // "board.variant": "esp32c6_devkitc/esp32c6/hpcore",
+    // "board.overlay": "boards/esp32c6_devkitc.overlay",
+    // "flash.device": "/dev/ttyACM0",
+
+    // ESP32-H2 configuration (builtin USB-JTAG)
+    "esp32.variant": "esp32h2",
+    "board.variant": "esp32h2_devkitm/esp32h2",
+    "board.overlay": "boards/esp32h2_devkitm.overlay",
     "flash.device": "/dev/ttyACM0",
 
     "cmake.ignoreCMakeListsMissing": true

@@ -10,8 +10,8 @@
 * [VS Code - Keyboard shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf)
 
 ## How to list Board targets
-* west boards | grep esp32c3_devkitc 
-* west boards --all-targets --name esp32s6_devkitc
+* west boards | grep esp32h2_devkitm 
+* west boards --all-targets --name esp32h2_devkitm
 
 ## Build code
 * Change to project dir /workspace/apps/01_blink
