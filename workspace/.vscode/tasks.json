@@ -8,10 +8,10 @@
       "args": [
         "build",
         "-p", "always",
-        "-b", "${config:board.variant}/${config:esp32.variant}/procpu",
+        "-b", "${config:board.variant}",
         "-d", "build-${config:esp32.variant}",
         "--",
-        "-DDTC_OVERLAY_FILE=boards/${config:board.variant}.overlay",
+        "-DDTC_OVERLAY_FILE=${config:board.overlay}",
         "-DOPENOCD=${env:OPENOCD_ESP32_ROOT}/bin/openocd",
         "-DOPENOCD_DEFAULT_PATH=${env:OPENOCD_ESP32_ROOT}/share/openocd/scripts",
         "-DCONFIG_BUILD_OUTPUT_HEX=y"

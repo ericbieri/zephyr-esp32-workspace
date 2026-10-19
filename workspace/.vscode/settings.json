@@ -1,7 +1,17 @@
 {
     "project.root": "/workspace/applications/01_blink",
-    "esp32.variant": "esp32s3",
-    "board.variant": "esp32s3_devkitc",
-    "flash.device": "/dev/ttyACM1",
+
+    // ESP32-S2 configuration
+    "esp32.variant": "esp32s2",
+    "board.variant": "esp32s2_saola/esp32s2",
+    "board.overlay": "boards/esp32s2_saola.overlay",
+    "flash.device": "/dev/ttyUSB0",
+
+    // ESP32-S3 configuration
+    // "esp32.variant": "esp32s3",
+    // "board.variant": "esp32s3_devkitc/esp32s3/procpu",
+    // "board.overlay": "boards/esp32s3_devkitc.overlay",
+    // "flash.device": "/dev/ttyACM1",
+    
     "cmake.ignoreCMakeListsMissing": true
 }
