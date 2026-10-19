@@ -12,6 +12,12 @@
     // "board.variant": "esp32s3_devkitc/esp32s3/procpu",
     // "board.overlay": "boards/esp32s3_devkitc.overlay",
     // "flash.device": "/dev/ttyACM1",
+
+    // ESP32-C3 configuration (builtin USB-JTAG)
+    "esp32.variant": "esp32c3",
+    "board.variant": "esp32c3_devkitc/esp32c3",
+    "board.overlay": "boards/esp32c3_devkitc.overlay",
+    "flash.device": "/dev/ttyACM0",
     
     "cmake.ignoreCMakeListsMissing": true
 }

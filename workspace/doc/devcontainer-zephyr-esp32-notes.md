@@ -9,8 +9,16 @@
 ###  Links
 * [VS Code - Keyboard shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf)
 
+## How to list Board targets
+* west boards | grep esp32c3_devkitc 
+* west boards --all-targets --name esp32s3_devkitc -> west boards -a -n esp32c3_devkitc
+
 ## Build code
 * Change to project dir /workspace/apps/01_blink
+
+## Synch modules
+* west list | grep hal_espressif
+* Synch modules west update hal_espressif
 
 ### ESP32
 * Set CONFIG_ESP32_USE_UNSUPPORTED_REVISION=y in prj.conf (Feather ESP32 uses an old V1.0 Core)
@@ -21,7 +29,7 @@
 west build -p always \
   -b esp32_devkitc/esp32/procpu \
   -d build-esp32 \
-  -- \
+  -- \$
   -DDTC_OVERLAY_FILE=boards/esp32_devkitc_wroom.overlay \
   -DOPENOCD=/opt/openocd/bin/openocd \
   -DOPENOCD_DEFAULT_PATH=/opt/openocd/share/openocd/scripts \
@@ -100,6 +108,7 @@ west blobs fetch hal_espressif
 * [OpenOCD - Github](https://github.com/openocd-org/openocd)
 * [OpenOCD - Espressif - Github](https://github.com/espressif/openocd-esp32)
 * [Espressif - Configure ESP32-S3 Built-in JTAG Interface](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/api-guides/jtag-debugging/configure-builtin-jtag.html)
+* [Espressif - Debug with ESP32Prog](https://blog.berrybase.de/esp32-debuggen-mit-espressif-esp-prog-platformio/)
 * [Youtube - ESP32 Debugging your ESP-IDF code using JTAG](https://www.youtube.com/watch?v=uq93H7T7cOQ)
 
 ### Run

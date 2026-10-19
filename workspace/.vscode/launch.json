@@ -7,7 +7,8 @@
             "request": "launch",
             "cwd":  "${config:project.root}/build-${config:esp32.variant}/",
             "program": "${config:project.root}/build-${config:esp32.variant}/zephyr/zephyr.elf",
-            "miDebuggerPath": "${env:ZEPHYR_SDK_ROOT}/gnu/xtensa-espressif_${config:esp32.variant}_zephyr-elf/bin/xtensa-espressif_${config:esp32.variant}_zephyr-elf-gdb",
+            // "miDebuggerPath": "${env:ZEPHYR_SDK_ROOT}/gnu/xtensa-espressif_${config:esp32.variant}_zephyr-elf/bin/xtensa-espressif_${config:esp32.variant}_zephyr-elf-gdb",
+            "miDebuggerPath": "${env:ZEPHYR_SDK_ROOT}/gnu/riscv64-zephyr-elf/bin/riscv64-zephyr-elf-gdb",
             "setupCommands": [
                 {"text": "set remotetimeout 30"},
                 {"text": "target extended-remote 127.0.0.1:3333"},
