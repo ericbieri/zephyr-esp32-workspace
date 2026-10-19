@@ -1,7 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
-        {
+                {
             "name": "GDB-Debugger",
             "type": "cppdbg",
             "request": "launch",
@@ -19,6 +19,38 @@
                 {"text": "set mem inaccessible-by-default off"},
                 {"text": "set breakpoint auto-hw on"},
                 {"description": "Pretty print for gdb", "text": "-enable-pretty-printing", "ignoreFailures": true}
+            ]
+        },
+        {
+            "name": "GDB-Debugger-C6",
+            "type": "cppdbg",
+            "request": "launch",
+            "cwd":  "${config:project.root}/build-${config:esp32.variant}/",
+            "program": "${config:project.root}/build-${config:esp32.variant}/zephyr/zephyr.elf",
+            // "miDebuggerPath": "${env:ZEPHYR_SDK_ROOT}/gnu/xtensa-espressif_${config:esp32.variant}_zephyr-elf/bin/xtensa-espressif_${config:esp32.variant}_zephyr-elf-gdb",
+            "miDebuggerPath": "${env:ZEPHYR_SDK_ROOT}/gnu/riscv64-zephyr-elf/bin/riscv64-zephyr-elf-gdb",
+            "MIMode": "gdb",
+            "miDebuggerServerAddress": "127.0.0.1:3333",
+            "useExtendedRemote": true,
+            "launchCompleteCommand": "exec-continue",
+            "stopAtEntry": true,
+            "hardwareBreakpoints": {
+                "require": true,
+                "limit": 2
+            },
+            "setupCommands": [
+                {"text": "set remotetimeout 30"},
+                {"text": "set remote hardware-breakpoint-limit 2"},
+                {"text": "set remote hardware-watchpoint-limit 4"},
+                {"text": "set mem inaccessible-by-default off"},
+                // Zephyr simple boot does not expose C6 IROM/DROM mappings to OpenOCD.
+                {"text": "mem 0x42000000 0x43000000 ro"},
+                {"text": "set breakpoint auto-hw on"},
+                {"description": "Pretty print for gdb", "text": "-enable-pretty-printing", "ignoreFailures": true}
+            ],
+            "postRemoteConnectCommands": [
+                {"text": "monitor reset halt"},
+                {"text": "maintenance flush register-cache"}
             ]
         }
     ]

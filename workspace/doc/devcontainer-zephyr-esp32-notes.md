@@ -11,7 +11,7 @@
 
 ## How to list Board targets
 * west boards | grep esp32c3_devkitc 
-* west boards --all-targets --name esp32s3_devkitc -> west boards -a -n esp32c3_devkitc
+* west boards --all-targets --name esp32s6_devkitc
 
 ## Build code
 * Change to project dir /workspace/apps/01_blink
@@ -29,7 +29,7 @@
 west build -p always \
   -b esp32_devkitc/esp32/procpu \
   -d build-esp32 \
-  -- \$
+  -- \
   -DDTC_OVERLAY_FILE=boards/esp32_devkitc_wroom.overlay \
   -DOPENOCD=/opt/openocd/bin/openocd \
   -DOPENOCD_DEFAULT_PATH=/opt/openocd/share/openocd/scripts \
@@ -118,8 +118,14 @@ west blobs fetch hal_espressif
 * 
 
 ### Run OpenOCD inside VSCode
-* task.json
-// TODO configuer VSCode as shown in Youtube video
+* Build and flash the selected application first; starting the debugger does not flash it.
+* Run **Tasks: Run Task > OpenOCD** and leave that task running.
+* Select **GDB-Debugger** in **Run and Debug**, then press **F5**.
+* The [launch configuration](../.vscode/launch.json) connects to OpenOCD on `127.0.0.1:3333`, resets and halts the target, then continues to `main`.
+* For the current ESP32-C6 Zephyr simple-boot build, OpenOCD reports no IROM/DROM mapping. The launch configuration marks the C6 mapped-flash window (`0x42000000` to `0x43000000`, end exclusive) read-only so GDB uses a hardware breakpoint for the entry stop. This is a CPU address range, not a flash programming offset.
+* User breakpoints also use hardware, limited to two concurrent instruction breakpoints. The entry breakpoint is removed once `main` is reached.
+* The current configuration uses the RISC-V GDB and C6 flash window; review those settings before switching to an Xtensa board.
+* If OpenOCD reports USB/JTAG transport errors, stop the debug session and restart the **OpenOCD** task before retrying. Only one OpenOCD process should own the adapter.
 
 ### Run on host - deprecated
 * openocd -s share/openocd/scripts/ -c 'set ESP_RTOS none; set ESP_FLASH_SIZE 0' -f board/esp32c6-builtin.cfg
