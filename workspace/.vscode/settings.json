@@ -8,10 +8,10 @@
     // "flash.device": "/dev/ttyUSB0",
 
     // ESP32-S3 configuration (builtin USB-JTAG)
-    // "esp32.variant": "esp32s3",
-    // "board.variant": "esp32s3_devkitc/esp32s3/procpu",
-    // "board.overlay": "boards/esp32s3_devkitc.overlay",
-    // "flash.device": "/dev/ttyACM1",
+    "esp32.variant": "esp32s3",
+    "board.variant": "esp32s3_devkitc/esp32s3/procpu",
+    "board.overlay": "boards/esp32s3_devkitc.overlay",
+    "flash.device": "/dev/ttyACM1",
 
     // ESP32-C3 configuration (builtin USB-JTAG)
     // "esp32.variant": "esp32c3",
@@ -26,10 +26,10 @@
     // "flash.device": "/dev/ttyACM0",
 
     // ESP32-H2 configuration (builtin USB-JTAG)
-    "esp32.variant": "esp32h2",
-    "board.variant": "esp32h2_devkitm/esp32h2",
-    "board.overlay": "boards/esp32h2_devkitm.overlay",
-    "flash.device": "/dev/ttyACM0",
+    // "esp32.variant": "esp32h2",
+    // "board.variant": "esp32h2_devkitm/esp32h2",
+    // "board.overlay": "boards/esp32h2_devkitm.overlay",
+    // "flash.device": "/dev/ttyACM0",
 
     "cmake.ignoreCMakeListsMissing": true
 }

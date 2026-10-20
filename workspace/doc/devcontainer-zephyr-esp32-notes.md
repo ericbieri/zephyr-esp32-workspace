@@ -250,35 +250,42 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 
 ## Todo
 * ESP32 Variants
-	* 
+	* ESP32(S2) + ESP32Prog
 
 * Configuration
-	* Wie kann ich am besten die Umgebung konfigurieren?
+	*  CLI/west nutzen ohne immer alle Optionen mitgeben zu müssen. 
+
 * Docker
+	* Initial .vscode settings!?
 	* USBIP auf osx, win und Linux aufsetzen
-	* Review Code with Copilot
+	* Entferne ungebrauchte ENV variablen
+	* Release Notes mit Versionen generieren
+	* Release Please einführen
+	* Renovate einführen
+
 * OpenOCD
-	* Autostart OpenOCD with Debbuger -> add Problemmatcher
-	* JTag connect / disconnect
-	* Problem it JTAG port, ist teiweise nicht mehr sichtbar, kann nicht mit VM verbunden werden.
+	* Autostart OpenOCD with GDB?
+
 * GDB
-	* Cannot set more than two HW Breakpoints
-* Build
-	* Compiler für debug optimieren / West?
+	
+* west
+	* Compiler für debug optimieren / west?
+
 * Deploy FW
 	* Deploy FW using JTAG -> see Video
-* USBIP
-	* Shutting down container does not terminate the connections to USBIP Server -> Service
+
+* USB Ports / USBIP
+	* Linux
+	* Windows
+	* Mac: Status, Link auf Mac USBIP
+
 * Program
-	* 01_blink
-		* richtige LED auf Board blinken lassen
-		* rename project
-* Versions
-	* Update Versions
-* Target MCUs
-	* ESP32, ESP32S3, ESP32S2
+	* Demo Blinky
+
 * Github
-	* Definitive Github Account?
+	* Rename Repo to devcontainer-zephyr-espressif
+	* Definitiver Github Account? Space for Embedded DevContainers?
+	* Release Notes with Versions also on Dockerhub?
 	
 * Documentation
 	* Wiki Pages on Github
@@ -286,8 +293,6 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 	* Introduction
 		* Goals (Pain, Complexity, Lightweight)
 			* What is the container for, what not?
-			* AI Github
-			* Free of Charge
 		* Zephyr
 		* Devcontainer: 
 			* Intro
@@ -295,43 +300,18 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 		* Debug 
 	* Install
 		* Prerequisites
-		* Document Versions
+		* Host Setup
+			* Linux
+			* Windows
+			* Mac
 		* USBIP RPI Client Setup
 			* Start/Stop Scripts
-	* Detailliertere Doku je Thema
-	* Debugger Setup
 	* Links Page?
 * DevContainer MCU Stacks
-	* ESP32-RISCV
-	* ESP32-Xtensa
+	* ESP32-RISCV / ESP32-Xtensa
 	* nRF5x-ARM
 	* STM32-ARM
 	* RPI-Pico
-* Github
-	* Space for Embedded DevContainers?
-	* Actions
-		* Release Tagging
-		* Release Notes with Versions also on Dockerhub?
-* Dockerfile
-	* Do I need all the env vars?
-	* Review file
-	* Can I make it smalle / faster?
-	
-
-
-
-
-
-## Next Steps
-* ESP32-S3 ist die E-Fuse gesetzt?
-* Test ESP32 with ESPProg JTAG debugger auf PIO
-	* Test in DevContainer macOS
-	* OpenOCD & GDB settings extrahieren 
-	* OpenOCD & GDB via CLI / Task starten
-
-
-* Setup (Server: ESP32S3, RPI), OSX (VSCode, Docker)
-	* Fix & document existing setup first 
 
 
 # Zephyr Project Structure
@@ -368,30 +348,7 @@ After changing the pinned Zephyr version, run `west update` to synchronize
 dependencies before rebuilding. Application manifests under `repos/` are
 independent and do not select this workspace's active manifest.
 
-Previous T1 topology (reference only)
---------------------------
-workspace/                     # west topdir
-├── .west/                     # marks the location of the topdir
-│   └── config                 # per-workspace local configuration file
-│
-│   # The manifest repository, never modified by west after creation:
-├── zephyr/                    # .git/ repo
-│   ├── west.yml               # manifest file
-│   └── [... other files ...]
-│
-│   # Projects managed by west:
-├── modules/
-│   └── lib/
-│       └── zcbor/             # .git/ project
-│
-├── tools/
-│   └── net-tools/  
-│
-├── bootloader/  
-│
-├── applications/
-│   ├── blinky/
-│   └── hello-world/
+
 
 
 
