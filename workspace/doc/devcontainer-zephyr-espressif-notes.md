@@ -1,4 +1,4 @@
-# DevContainer Zehpyr ESP32 Notes 
+# DevContainer Zehpyr Espressif Notes 
 
 ## Start DevContainer
 * Reopen Project in Container -> Command Palette (Ctrl+Shift+P, F1)
@@ -249,9 +249,6 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 * [ESP32-S3-DevKit-C](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide_v1.1.html#getting-started)
 
 ## Todo
-* ESP32 Variants
-	* ESP32(S2) + ESP32Prog
-
 * Configuration
 	*  CLI/west nutzen ohne immer alle Optionen mitgeben zu müssen. 
 
@@ -267,26 +264,25 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 	* Autostart OpenOCD with GDB?
 
 * GDB
+	* ESP32(S2) + ESP32Prog
 	
 * west
 	* Compiler für debug optimieren / west?
 
-* Deploy FW
-	* Deploy FW using JTAG -> see Video
-
 * USB Ports / USBIP
 	* Linux
-	* Windows
-	* Mac: Status, Link auf Mac USBIP
+	* Windows 
 
 * Program
 	* Demo Blinky
 
 * Github
-	* Rename Repo to devcontainer-zephyr-espressif
 	* Definitiver Github Account? Space for Embedded DevContainers?
 	* Release Notes with Versions also on Dockerhub?
-	
+
+* Extensions
+	* Nordic Extensions
+
 * Documentation
 	* Wiki Pages on Github
 	* QuickStart (ESP32, ESP32-S2, ESP32-S3 DevKits)
@@ -294,10 +290,8 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 		* Goals (Pain, Complexity, Lightweight)
 			* What is the container for, what not?
 		* Zephyr
-		* Devcontainer: 
-			* Intro
-			* DevContainer Naming, Architecture, ...
-		* Debug 
+		* Devcontainer Intro
+	* Debug 
 	* Install
 		* Prerequisites
 		* Host Setup
@@ -307,6 +301,7 @@ udev (userspace /dev) is a device manager for the Linux kernel. udev primarily m
 		* USBIP RPI Client Setup
 			* Start/Stop Scripts
 	* Links Page?
+	
 * DevContainer MCU Stacks
 	* ESP32-RISCV / ESP32-Xtensa
 	* nRF5x-ARM
@@ -347,11 +342,6 @@ west list zephyr hal_espressif hal_xtensa picolibc
 After changing the pinned Zephyr version, run `west update` to synchronize
 dependencies before rebuilding. Application manifests under `repos/` are
 independent and do not select this workspace's active manifest.
-
-
-
-
-
 
 Current separate-manifest topology
 ----------------------------
